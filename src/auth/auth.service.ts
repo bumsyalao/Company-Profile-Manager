@@ -1,13 +1,13 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity/user.entity';
-import { UserDto } from './user.dto';
+import { User } from '../users/user.entity/user.entity';
+import { UserDto } from '../users/user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UsersService {
+export class AuthService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
@@ -37,30 +37,28 @@ export class UsersService {
         return { accessToken };
     }
 
-    async signIn(username: string, password: string): Promise<{ accessToken: string }> {
-        const user = await this.userRepository.findOne({ where: { username } });
+    async validateUser(username: string, password: string): Promise<{ accessToken: string }> {
+        try {
+            const user = await this.userRepository.findOne({ where: { username } });
 
-        if (!user) {
-            throw new NotFoundException('User not found');
+            if (!user) {
+                throw new NotFoundException('User not found');
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+
+            if (!isPasswordValid) {
+                throw new NotFoundException('Invalid password');
+            }
+
+            // Generate and return a JWT token for authentication
+            const accessToken = this.jwtService.sign({ sub: user.id });
+            return { accessToken };
+
+        } catch (err) {
+            throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-            throw new NotFoundException('Invalid password');
-        }
-
-        // Generate and return a JWT token for authentication
-        const accessToken = this.jwtService.sign({ sub: user.id });
-
-        return { accessToken };
     }
 
-    async findByUsername(username: string): Promise<User | undefined> {
-        return this.userRepository.findOne({ where: { username } });
-    }
-
-    async findById(id: number): Promise<User | undefined> {
-        return this.userRepository.findOne({ where: { id } });
-    }
 }
