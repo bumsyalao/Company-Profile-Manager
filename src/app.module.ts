@@ -16,6 +16,7 @@ import { CompanyModule } from './company/company.module';
         url: process.env.DB_URL,
         synchronize: true,
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        migrations: [__dirname + 'migrations/*{.ts,.js}']
       }),
       inject: [ConfigService],
     }),

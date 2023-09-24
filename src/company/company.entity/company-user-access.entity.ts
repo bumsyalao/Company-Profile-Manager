@@ -8,10 +8,10 @@ export class CompanyUserAccess {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, (user) => user.companyUserAccess)
+    @ManyToOne(() => User, (user) => user.userAccess)
     user: User;
 
-    @ManyToOne(() => Company, (company) => company.companyUserAccess)
+    @ManyToOne(() => Company, (company) => company.companyAccess)
     company: Company;
 
     @Column()

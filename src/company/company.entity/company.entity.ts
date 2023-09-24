@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { User } from '../../users/user.entity/user.entity';
 import { CompanyUserAccess } from './company-user-access.entity';
 
@@ -22,5 +22,7 @@ export class Company {
     @ManyToMany(() => User)
     @JoinTable({ name: 'company_user_access' })
     users: User[];
-    companyUserAccess: CompanyUserAccess[];
+
+    @OneToMany(() => CompanyUserAccess, (access) => access.company)
+    companyAccess: CompanyUserAccess[];
 }
