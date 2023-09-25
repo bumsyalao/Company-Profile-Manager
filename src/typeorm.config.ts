@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
-import * as path from 'path';
+
 
 dotenv.config();
 const DB_URL = process.env.DB_URL
@@ -10,15 +10,8 @@ export default new DataSource({
     url: DB_URL,
     synchronize: true,
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    // migrations: [path.join(__dirname, '/*.migrations{.ts,.js}')],
-    // migrations: [__dirname + '/**/migrations/*{.ts,.js}'],
-    // migrations: [path.join(__dirname, 'src', 'migrations', '*{.ts,.js}')],
-    migrations: ['src/migration/*{.ts,.js}'],
-
+    migrations: [__dirname + '/**/migrations/*{.ts,.js}'],
     migrationsRun: true,
-
-
-
 
 });
 
