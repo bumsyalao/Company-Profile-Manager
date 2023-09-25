@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CompanyModule } from './company/company.module';
 
+const DB_URL = process.env.DB_URL
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -13,15 +15,17 @@ import { CompanyModule } from './company/company.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        url: process.env.DB_URL,
+        url: DB_URL,
         synchronize: true,
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        migrations: [__dirname + 'migrations/*{.ts,.js}']
+        // migrations: [path.join(__dirname, '/**/*.ts')],
+        // migrations: [__dirname + '/src/migrations/*{.ts,.js}'],
+        // migrationsRun: true
       }),
       inject: [ConfigService],
     }),
     AuthModule,
-    CompanyModule,
+    // CompanyModule,
 
   ],
   controllers: [AppController],
