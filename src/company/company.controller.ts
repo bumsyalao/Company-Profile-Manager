@@ -36,11 +36,11 @@ export class CompanyController {
         @Param('userId') userId: string,
         @Param('accessLevel') accessLevel: string,
     ) {
-        return this.companyUserAccessService.grantAccessToUser(+userId, +companyId, accessLevel);
+        return this.companyUserAccessService.grantAccessToUser(+companyId, +userId, accessLevel);
     }
 
     @Delete(':id/revoke/:userId')
     revokeAccess(@Param('id') companyId: string, @Param('userId') userId: string) {
-        return this.companyUserAccessService.revokeAccessFromUser(+userId, +companyId);
+        return this.companyUserAccessService.revokeAccessFromUser(+companyId, +userId);
     }
 }

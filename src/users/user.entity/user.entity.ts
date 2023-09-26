@@ -15,11 +15,11 @@ export class User {
     @Column()
     password: string;
 
-    @ManyToMany(() => Company)
-    @JoinTable({ name: 'company_user_access' })
+    @ManyToMany(() => Company, (company) => company.companyUsers)
+    @JoinTable()
     companies: Company[];
 
 
-    @OneToMany(() => CompanyUserAccess, (access) => access.user)
+    @OneToMany(() => CompanyUserAccess, (access) => access.userDetails)
     userAccess: CompanyUserAccess[];
 }

@@ -19,10 +19,10 @@ export class Company {
     @Column()
     industry: string;
 
-    @ManyToMany(() => User)
-    @JoinTable({ name: 'company_user_access' })
-    users: User[];
+    @ManyToMany(() => User, (user) => user.companies)
+    @JoinTable()
+    companyUsers: User[];
 
-    @OneToMany(() => CompanyUserAccess, (access) => access.company)
+    @OneToMany(() => CompanyUserAccess, (access) => access.companyDetails)
     companyAccess: CompanyUserAccess[];
 }

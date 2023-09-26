@@ -24,7 +24,6 @@ const DB_URL = process.env.DB_URL
     }),
     AuthModule,
     CompanyModule,
-
   ],
   controllers: [AppController],
   providers: [AppService],
