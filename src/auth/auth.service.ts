@@ -51,7 +51,6 @@ export class AuthService {
                 throw new NotFoundException('Invalid password');
             }
 
-            // Generate and return a JWT token for authentication
             const accessToken = this.jwtService.sign({ sub: user.id });
             return { accessToken };
 
@@ -59,6 +58,28 @@ export class AuthService {
             throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    async getUserDetails(token: string): Promise<User | null> {
+        try {
+            const decodedToken = this.jwtService.verify(token);
+
+            if (!decodedToken || !decodedToken.sub) {
+                throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+            }
+
+            const userId = decodedToken.sub;
+
+            const user = await this.userRepository.findOne(userId);
+
+            if (!user) {
+                throw new NotFoundException('User not found');
+            }
+
+            return user;
+        } catch (error) {
+            throw new HttpException('Failed to fetch user details', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

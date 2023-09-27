@@ -15,4 +15,3 @@ export default new DataSource({
 
 });
 
-// "migration:create": "typeorm-ts-node-esm src/typeorm.config.ts migration:create  -d src/migrations",
